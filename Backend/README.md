@@ -30,4 +30,19 @@ The request body should be in JSON format and include the following fields:
   - `password` (string): User's password (minimum 6 characters).
 - `token` (String): JWT Token
 
+#### Example
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "_id": "60d0fe4f5311236168a109ca",
+    "fullname": {
+      "firstname": "Rohan",
+      "lastname": "Kumar"
+    },
+    "email": "rohan@gmail.com"
+  }
+}
+```
+
 ## `/users/login` Endpoint
