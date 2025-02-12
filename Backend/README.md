@@ -212,16 +212,22 @@ Registers a new captain by creating a captain account with the provided informat
 
 The request body should be in JSON format and include the following fields:
 
-- `fullname` (object):
-  - `firstname` (string, required): Captain's first name (minimum 3 characters).
-  - `lastname` (string, optional): Captain's last name (minimum 3 characters).
-- `email` (string, required): Captain's email address (must be a valid email).
-- `password` (string, required): Captain's password (minimum 8 characters).
-- `vehicle` (object):
-  - `color` (string, required): Vehicle color (minimum 3 characters).
-  - `plate` (string, required): Vehicle plate (minimum 3 characters).
-  - `capacity` (integer, required): Vehicle capacity (minimum 1).
-  - `vehicleType` (string, required): Vehicle type (must be either car, motorcycle, or auto).
+```json
+{
+  "fullname": {
+    "firstname": "string (required, min length: 3)", // Captain's first name
+    "lastname": "string (optional, min length: 3)" // Captain's last name
+  },
+  "email": "string (required, valid email format)", // Captain's email address
+  "password": "string (required, min length: 8)", // Captain's password
+  "vehicle": {
+    "color": "string (required, min length: 3)", // Vehicle color
+    "plate": "string (required, min length: 3)", // Vehicle plate
+    "capacity": "integer (required, min: 1)", // Vehicle capacity
+    "vehicleType": "string (required, one of: 'car', 'motorcycle', 'auto')" // Vehicle type
+  }
+}
+```
 
 ### Example Response
 
@@ -259,6 +265,183 @@ The request body should be in JSON format and include the following fields:
           "location": "string"
         }
       ]
+    }
+    ```
+
+- **500 Internal Server Error**
+  - **Description:** An error occurred on the server.
+
+## `/captains/login` Endpoint
+
+### Description
+
+Logs in an existing captain by validating the provided credentials.
+
+### HTTP Method
+
+`POST`
+
+### Request Body
+
+The request body should be in JSON format and include the following fields:
+
+```json
+{
+  "email": "string (required, valid email format)", // Captain's email address
+  "password": "string (required, min length: 6)" // Captain's password
+}
+```
+
+### Example Response
+
+- **200 OK**
+  - **Description:** Captain successfully logged in.
+  - **Body:**
+    ```json
+    {
+      "token": "string",
+      "captain": {
+        "_id": "string",
+        "fullname": {
+          "firstname": "string",
+          "lastname": "string"
+        },
+        "email": "string",
+        "vehicle": {
+          "color": "string",
+          "plate": "string",
+          "capacity": "integer",
+          "vehicleType": "string"
+        }
+      }
+    }
+    ```
+  - **Example:**
+    ```json
+    {
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+      "captain": {
+        "_id": "60d0fe4f5311236168a109ca",
+        "fullname": {
+          "firstname": "Rohan",
+          "lastname": "Kumar"
+        },
+        "email": "rohan@gmail.com",
+        "vehicle": {
+          "color": "red",
+          "plate": "ABC123",
+          "capacity": 4,
+          "vehicleType": "car"
+        }
+      }
+    }
+    ```
+
+- **400 Bad Request**
+  - **Description:** Validation error.
+  - **Body:**
+    ```json
+    {
+      "errors": [
+        {
+          "msg": "string",
+          "param": "string",
+          "location": "string"
+        }
+      ]
+    }
+    ```
+
+- **401 Unauthorized**
+  - **Description:** Invalid email or password.
+  - **Body:**
+    ```json
+    {
+      "message": "Invalid email or password"
+    }
+    ```
+
+- **500 Internal Server Error**
+  - **Description:** An error occurred on the server.
+
+## `/captains/profile` Endpoint
+
+### Description
+
+Fetches the profile of the authenticated captain.
+
+### HTTP Method
+
+`GET`
+
+### Headers
+
+- `Authorization`: Bearer token
+
+### Example Response
+
+- **200 OK**
+  - **Description:** Captain profile fetched successfully.
+  - **Body:**
+    ```json
+    {
+      "captain": {
+        "_id": "60d0fe4f5311236168a109ca",
+        "fullname": {
+          "firstname": "Rohan",
+          "lastname": "Kumar"
+        },
+        "email": "rohan@gmail.com",
+        "vehicle": {
+          "color": "red",
+          "plate": "ABC123",
+          "capacity": 4,
+          "vehicleType": "car"
+        }
+      }
+    }
+    ```
+
+- **401 Unauthorized**
+  - **Description:** Captain is not authenticated.
+  - **Body:**
+    ```json
+    {
+      "message": "Unauthorized"
+    }
+    ```
+
+## `/captains/logout` Endpoint
+
+### Description
+
+Logs out the authenticated captain by invalidating the token.
+
+### HTTP Method
+
+`GET`
+
+### Headers
+
+- `Authorization`: Bearer token
+
+### Example Response
+
+- **200 OK**
+  - **Description:** Captain successfully logged out.
+  - **Body:**
+    ```json
+    {
+      "message": "Logged out"
+    }
+    ```
+
+- **401 Unauthorized**
+  - **Description:** Captain is not authenticated.
+  - **Body:**
+    ```json
+    {
+      "message": "Unauthorized"
     }
     ```
 
