@@ -197,3 +197,70 @@ Logs out the authenticated user by invalidating the token.
 
 - **500 Internal Server Error**
   - **Description:** An error occurred on the server.
+
+## `/captains/register` Endpoint
+
+### Description
+
+Registers a new captain by creating a captain account with the provided information.
+
+### HTTP Method
+
+`POST`
+
+### Request Body
+
+The request body should be in JSON format and include the following fields:
+
+- `fullname` (object):
+  - `firstname` (string, required): Captain's first name (minimum 3 characters).
+  - `lastname` (string, optional): Captain's last name (minimum 3 characters).
+- `email` (string, required): Captain's email address (must be a valid email).
+- `password` (string, required): Captain's password (minimum 8 characters).
+- `vehicle` (object):
+  - `color` (string, required): Vehicle color (minimum 3 characters).
+  - `plate` (string, required): Vehicle plate (minimum 3 characters).
+  - `capacity` (integer, required): Vehicle capacity (minimum 1).
+  - `vehicleType` (string, required): Vehicle type (must be either car, motorcycle, or auto).
+
+### Example Response
+
+- **201 Created**
+  - **Description:** Captain successfully registered.
+  - **Body:**
+    ```json
+    {
+      "captain": {
+        "_id": "60d0fe4f5311236168a109ca",
+        "fullname": {
+          "firstname": "Rohan",
+          "lastname": "Kumar"
+        },
+        "email": "rohan@gmail.com",
+        "vehicle": {
+          "color": "red",
+          "plate": "ABC123",
+          "capacity": 4,
+          "vehicleType": "car"
+        }
+      }
+    }
+    ```
+
+- **400 Bad Request**
+  - **Description:** Validation error.
+  - **Body:**
+    ```json
+    {
+      "errors": [
+        {
+          "msg": "string",
+          "param": "string",
+          "location": "string"
+        }
+      ]
+    }
+    ```
+
+- **500 Internal Server Error**
+  - **Description:** An error occurred on the server.
